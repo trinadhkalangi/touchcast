@@ -1,23 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
+import booksData from './books.json';
 
 function App() {
 
-  const [books, setBooks] = useState();
+  // const [books, ] = useState(booksData?.results?.books);
   const [bookDetails, setBookDetails] = useState();
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollRef = useRef();
-
-  useEffect(() => {
-    fetch("./books.json",{
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       }
-    }).then((books) => books.json()).then(books => {
-        setBooks(books?.results?.books);
-    })
-  }, [])
 
   useEffect(() => {
     document.querySelector('.detail-row')?.scrollIntoView();
@@ -27,7 +17,7 @@ function App() {
     <>
       <header className='p-4'>
         <img
-          src='/touchcast/assets/bmuse_logo.png'
+          src='/assets/bmuse_logo.png'
           alt='headerLogo' />
         <span className='header-icon'>
           <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 30 30" width="25px" height="25px"><path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z" /></svg>
@@ -51,14 +41,14 @@ function App() {
             <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z" />
           </svg>
         </button>}
-        <div ref={scrollRef} className='book-row px-5' onScroll={() => {
+        <div ref={scrollRef} className='book-row' onScroll={() => {
           setScrollPosition(document.querySelector('.book-row').scrollLeft)
         }}>
-          {books?.map(book => (
+          {booksData?.results?.books?.map(book => (
             <div key={book.title} className='book' onClick={() => {
               setBookDetails(book)
             }}>
-              <img key={book.title} className={book.title === bookDetails?.title ? 'book-highlight book-image' : 'book-image'} alt={book.title} src={`/touchcast${book.book_image}`} />
+              <img key={book.title} className={book.title === bookDetails?.title ? 'book-highlight book-image' : 'book-image'} alt={book.title} src={book.book_image} />
               <div className='book-title'>{book.title}</div>
               <div className='book-author'>{book.author}</div>
               <div className='book-publisher'>{book.publisher}</div>
@@ -79,7 +69,7 @@ function App() {
           <div className='detail-title'>
             <span>{bookDetails.title}</span>
           </div>
-          <img key={bookDetails.title} className='detail-image' alt={bookDetails.title} src={`/touchcast${bookDetails.book_image}`} />
+          <img key={bookDetails.title} className='detail-image' alt={bookDetails.title} src={bookDetails.book_image} />
           <button type='button' className='add-to-favorite'>
             <span style={{ color: "#fff" }}>Add to Favorites</span>
             <svg fill='#fff' className='float-end me-2' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z" /></svg>
